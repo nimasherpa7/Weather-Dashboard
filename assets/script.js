@@ -17,12 +17,16 @@ function getUserCityCoords(query) {
 }
 
 function getForecast(lat,lon){
-    fetch(`${apiUrl}/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`)
+    fetch(`${apiUrl}/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=imperial`)
         .then((response)=>{
             return response.json()
         })
         .then((data) => {
             console.log(data)
+            document.getElementById("location").innerText="Location: "+data.city.name
+            document.getElementById("temp").innerText="Temperture: "+data.list[0].main.temp+"°"
+            document.getElementById("wind").innerText="Wind: "+data.list[0].wind.speed+"MPH"
+            document.getElementById("humidity").innerText="Humidity: "+data.list[0].main.humidity+"%"
             renderForecast(data)
         })
 }
@@ -38,11 +42,11 @@ function renderForecast(data) {
         const forecastHumidity=document.createElement("h4")
         const forecastImg=document.createElement("img")
 
-        forecastCityname.textContent=data.city.name
-        forecastTemp.textContent=data.list[i].main.temp
-        forecastWind.textContent=data.list[i].wind.speed
-        forecastHumidity.textContent=data.list[i].main.humidity
-        forecastImg.setAttribute("src",data.list[i].weather[0].icon)
+        forecastCityname.textContent="Location:"+data.city.name
+        forecastTemp.textContent="Temperture:"+data.list[i].main.temp+"°"
+        forecastWind.textContent="Wind: "+data.list[i].wind.speed+"MPH"
+        forecastHumidity.textContent="Humidity: "+data.list[i].main.humidity+"%"
+        forecastImg.setAttribute("src", `http://openweathermap.org/img/w/${data.list[i].weather[0].icon}.png`)
 
         forecastLi.append(forecastCityname, forecastTemp, forecastWind, forecastImg)
         forecastCard.append(forecastLi)
